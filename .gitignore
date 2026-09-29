@@ -1,0 +1,20 @@
+# Entorno virtual y cachés de Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Configuración privada (contraseñas, clave secreta)
+config/local_settings.py
+
+# Ficheros generados
+staticfiles/
+media/
+*.log
+db.sqlite3
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

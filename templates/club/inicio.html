@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="container py-5">
+  <div class="row align-items-center g-5">
+    <div class="col-lg-6">
+      <h1 class="display-6 mb-3">Ventajas para los clientes de Óptica Brigantium</h1>
+      <p class="lead text-secondary">Regístrese gratis y reciba un descuento de bienvenida, un regalo en su cumpleaños y promociones exclusivas para usar en la óptica.</p>
+      <a href="#" class="btn btn-club btn-lg mt-2">Unirme al club</a>
+      <p class="small text-secondary mt-3">¿Ya es socio? <a href="{% url 'cuentas:login' %}">Inicie sesión</a></p>
+    </div>
+    <div class="col-lg-6 d-flex justify-content-lg-end">
+      <div class="cupon w-100" aria-label="Ejemplo de cupón">
+        <div class="cupon-info">
+          <div class="small opacity-75">Bienvenida al club</div>
+          <div class="cupon-valor my-2">−15 %</div>
+          <div>En monturas graduadas</div>
+          <div class="small opacity-75 mt-3">Enséñelo en la óptica desde su móvil</div>
+        </div>
+        <div class="cupon-qr"><i class="bi bi-qr-code" style="font-size:4.5rem;color:var(--azul)" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
