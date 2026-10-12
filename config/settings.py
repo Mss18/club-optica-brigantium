@@ -126,3 +126,5 @@ try:
     from .local_settings import *
 except ImportError:
     raise ImportError("Falta config/local_settings.py. Copia local_settings.example.py y rellénalo.")    
+
+AUTH_USER_MODEL = 'cuentas.Usuario'
