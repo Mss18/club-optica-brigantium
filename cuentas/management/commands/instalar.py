@@ -3,6 +3,8 @@ from django.core.management import call_command
 from django.contrib.auth.models import Group
 from cuentas.models import Usuario
 from getpass import getpass
+import MySQLdb
+from django.conf import settings
 
 
 ROLES = ["Cliente", "Dependiente", "Administrador"]
@@ -11,8 +13,23 @@ ROLES = ["Cliente", "Dependiente", "Administrador"]
 class Command(BaseCommand):
     help = "Instalar y configurar la BD"
 
+    def crear_base_datos(self):
+            bd = settings.DATABASES["default"]
+            conexion = MySQLdb.connect(
+                        host=bd["HOST"],
+                        user=bd["USER"],
+                        passwd=bd["PASSWORD"],
+                        port=int(bd["PORT"]),
+                    )
+            cursor = conexion.cursor()
+            cursor.execute(
+                        f"CREATE DATABASE IF NOT EXISTS `{bd['NAME']}` CHARACTER SET utf8mb4"
+                    )
+            conexion.close()
+
     def handle(self, *args, **options):
         self.stdout.write("Iniciando la autoinstalación de la BD")
+        self.crear_base_datos()
         call_command("migrate")
 
         for rol in ROLES:
@@ -39,3 +56,8 @@ class Command(BaseCommand):
             self.stdout.write(f"Administrador {nombre_usuario} creado correctamente")
 
         self.stdout.write("Autoinstalación de la BD completada")
+
+
+
+
+    
