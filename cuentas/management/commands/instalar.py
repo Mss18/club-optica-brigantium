@@ -1,11 +1,12 @@
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
-from django.contrib.auth.models import Group
-from cuentas.models import Usuario
 from getpass import getpass
+
 import MySQLdb
 from django.conf import settings
+from django.contrib.auth.models import Group
+from django.core.management import call_command
+from django.core.management.base import BaseCommand
 
+from cuentas.models import Usuario
 
 ROLES = ["Cliente", "Dependiente", "Administrador"]
 
@@ -27,7 +28,7 @@ class Command(BaseCommand):
         )
         conexion.close()
 
-    def handle(self, *args, **options):
+    def handle(self):
         self.stdout.write("Iniciando la autoinstalación de la BD")
         self.crear_base_datos()
         call_command("migrate")
