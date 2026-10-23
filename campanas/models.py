@@ -57,3 +57,16 @@ class Cupon(models.Model):
 
     def __str__(self):
         return f"{self.beneficio} - {self.cliente}"
+
+
+class Canje(models.Model):
+    cupon = models.OneToOneField(Cupon, on_delete=models.CASCADE)
+    dependiente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    fecha_canje = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "canje"
+        verbose_name_plural = "canjes"
+
+    def __str__(self):
+        return f"{self.cupon} - {self.fecha_canje}"
