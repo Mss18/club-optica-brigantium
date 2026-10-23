@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from campanas import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("cuentas/", include("cuentas.urls")),
+    path("", views.inicio, name="inicio"),
 ]

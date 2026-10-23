@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+  <h1>Campañas activas</h1>
+  {% for campana in campanas %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="h4">{{ campana.nombre }}</h2>
+        <p>{{ campana.descripcion }}</p>
+        <ul>
+          {% for beneficio in campana.beneficio_set.all %}
+            <li>{{ beneficio.titulo }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% empty %}
+    <p>No hay campañas activas ahora mismo.</p>
+  {% endfor %}
+{% endblock %}
