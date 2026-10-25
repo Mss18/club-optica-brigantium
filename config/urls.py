@@ -25,4 +25,5 @@ urlpatterns = [
     path("", views.inicio, name="inicio"),
     path("cupon/pedir/<int:beneficio_id>/", views.pedir_cupon, name="pedir_cupon"),
     path("mis-cupones/", views.mis_cupones, name="mis_cupones"),
+    path("canjear/", views.canjear, name="canjear"),
 ]

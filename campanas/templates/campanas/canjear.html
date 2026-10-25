@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titulo %}Canjear cupón{% endblock %}
+
+{% block contenido %}
+  <h1>Canjear cupón</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="codigo" class="form-label">Código del cupón</label>
+    <input type="text" id="codigo" name="codigo" class="form-control mb-3" required autofocus>
+    <button type="submit" class="btn btn-primary">Canjear</button>
+  </form>
+{% endblock %}

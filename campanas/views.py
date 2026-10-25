@@ -1,9 +1,11 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.core.exceptions import ValidationError
 
-from .models import Beneficio, Campana, Cupon
+from .models import Beneficio, Campana, Canje, Cupon
 
 
 def inicio(request):
@@ -33,3 +35,29 @@ def pedir_cupon(request, beneficio_id):
 def mis_cupones(request):
     cupones = Cupon.objects.filter(cliente=request.user).order_by("-fecha_emision")
     return render(request, "campanas/mis_cupones.html", {"cupones": cupones})
+
+
+def es_dependiente(usuario):
+    return usuario.groups.filter(name="Dependiente").exists()
+
+
+@login_required
+@user_passes_test(es_dependiente)
+def canjear(request):
+    if request.method == "POST":
+        codigo = request.POST.get("codigo", "").strip()
+        try:
+            cupon = Cupon.objects.get(codigo=codigo)
+        except (Cupon.DoesNotExist, ValidationError):
+            messages.error(request, "El código no existe")
+        else:
+            if cupon.estado != "activo":
+                messages.error(request, "Este cupón ya no está activo")
+            elif cupon.fecha_caducidad < timezone.localdate():
+                messages.error(request, "Este cupón ha caducado")
+            else:
+                Canje.objects.create(cupon=cupon, dependiente=request.user)
+                cupon.estado = "canjeado"
+                cupon.save()
+                messages.success(request, f"Cupón canjeado: {cupon.beneficio}")
+    return render(request, "campanas/canjear.html")
