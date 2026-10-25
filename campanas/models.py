@@ -1,5 +1,3 @@
-# Create your models here.
-
 import uuid
 
 import segno
@@ -9,9 +7,9 @@ from django.db import models
 
 class Campana(models.Model):
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
+    descripcion = models.TextField(blank=True, verbose_name="descripción")
+    fecha_inicio = models.DateField(verbose_name="fecha de inicio")
+    fecha_fin = models.DateField(verbose_name="fecha de fin")
     activa = models.BooleanField(default=True)
 
     class Meta:
@@ -28,12 +26,16 @@ class Beneficio(models.Model):
         ("regalo", "Regalo"),
         ("servicio", "Servicio"),
     )
-    campana = models.ForeignKey(Campana, on_delete=models.PROTECT)
-    titulo = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True)
+    campana = models.ForeignKey(
+        Campana, on_delete=models.PROTECT, verbose_name="campaña"
+    )
+    titulo = models.CharField(max_length=100, verbose_name="título")
+    descripcion = models.TextField(blank=True, verbose_name="descripción")
     condiciones = models.TextField(blank=True)
     tipo = models.CharField(choices=TIPOS, max_length=20)
-    limite_por_cliente = models.PositiveSmallIntegerField(default=1)
+    limite_por_cliente = models.PositiveSmallIntegerField(
+        default=1, verbose_name="límite por cliente"
+    )
 
     def __str__(self):
         return self.titulo
@@ -46,10 +48,12 @@ class Cupon(models.Model):
         ("caducado", "Caducado"),
     )
     cliente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    codigo = models.UUIDField(default=uuid.uuid4, unique=True)
-    fecha_emision = models.DateTimeField(auto_now_add=True)
+    codigo = models.UUIDField(default=uuid.uuid4, unique=True, verbose_name="código")
+    fecha_emision = models.DateTimeField(
+        auto_now_add=True, verbose_name="fecha de emisión"
+    )
     beneficio = models.ForeignKey(Beneficio, on_delete=models.PROTECT)
-    fecha_caducidad = models.DateField()
+    fecha_caducidad = models.DateField(verbose_name="fecha de caducidad")
     estado = models.CharField(choices=ESTADOS, max_length=20, default="activo")
 
     class Meta:
@@ -65,9 +69,9 @@ class Cupon(models.Model):
 
 
 class Canje(models.Model):
-    cupon = models.OneToOneField(Cupon, on_delete=models.CASCADE)
+    cupon = models.OneToOneField(Cupon, on_delete=models.CASCADE, verbose_name="cupón")
     dependiente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    fecha_canje = models.DateTimeField(auto_now_add=True)
+    fecha_canje = models.DateTimeField(auto_now_add=True, verbose_name="fecha de canje")
 
     class Meta:
         verbose_name = "canje"
