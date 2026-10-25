@@ -4,10 +4,21 @@
 
 {% block contenido %}
   <h1>Canjear cupón</h1>
-  <form method="post">
+  <form method="post" id="form-canje">
     {% csrf_token %}
     <label for="codigo" class="form-label">Código del cupón</label>
     <input type="text" id="codigo" name="codigo" class="form-control mb-3" required autofocus>
     <button type="submit" class="btn btn-primary">Canjear</button>
   </form>
+  <div id="lector" class="mt-4" style="max-width: 400px;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script>
+  const lector = new Html5QrcodeScanner("lector", { fps: 10, qrbox: 250 });
+  lector.render((texto) => {
+    document.getElementById("codigo").value = texto;
+    lector.clear();
+    document.getElementById("form-canje").submit();
+  });
+</script>
 {% endblock %}
