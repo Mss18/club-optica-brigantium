@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block titulo %}Mis cupones{% endblock %}
+
+{% block contenido %}
+  <h1>Mis cupones</h1>
+  {% for cupon in cupones %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h2 class="h5">{{ cupon.beneficio.titulo }}</h2>
+        <p>Estado: {{ cupon.get_estado_display }} · Caduca el {{ cupon.fecha_caducidad }}</p>
+        <img src="{{ cupon.qr }}" alt="Código QR del cupón">
+      </div>
+    </div>
+  {% empty %}
+    <p>Todavía no tienes cupones.</p>
+  {% endfor %}
+{% endblock %}

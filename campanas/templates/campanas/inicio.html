@@ -11,7 +11,13 @@
         <p>{{ campana.descripcion }}</p>
         <ul>
           {% for beneficio in campana.beneficio_set.all %}
-            <li>{{ beneficio.titulo }}</li>
+            <li>
+              {{ beneficio.titulo }}
+              <form method="post" action="{% url 'pedir_cupon' beneficio.id %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-primary">Quiero este cupón</button>
+              </form>
+            </li>            
           {% endfor %}
         </ul>
       </div>

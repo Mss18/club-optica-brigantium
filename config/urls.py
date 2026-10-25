@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("cuentas/", include("cuentas.urls")),
     path("", views.inicio, name="inicio"),
+    path("cupon/pedir/<int:beneficio_id>/", views.pedir_cupon, name="pedir_cupon"),
+    path("mis-cupones/", views.mis_cupones, name="mis_cupones"),
 ]

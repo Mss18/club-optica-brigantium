@@ -2,6 +2,7 @@
 
 import uuid
 
+import segno
 from django.conf import settings
 from django.db import models
 
@@ -57,6 +58,10 @@ class Cupon(models.Model):
 
     def __str__(self):
         return f"{self.beneficio} - {self.cliente}"
+
+    @property
+    def qr(self):
+        return segno.make(str(self.codigo)).svg_data_uri(scale=5)
 
 
 class Canje(models.Model):
