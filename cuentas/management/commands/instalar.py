@@ -28,7 +28,7 @@ class Command(BaseCommand):
         )
         conexion.close()
 
-    def handle(self):
+    def handle(self, *args, **options):
         self.stdout.write("Iniciando la autoinstalación de la BD")
         self.crear_base_datos()
         call_command("migrate")
