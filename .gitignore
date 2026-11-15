@@ -11,6 +11,7 @@ config/local_settings.py
 staticfiles/
 media/
 *.log
+logs/
 db.sqlite3
 
 # Editores y sistema
