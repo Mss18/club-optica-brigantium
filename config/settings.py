@@ -118,10 +118,36 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "{asctime} {levelname} {message}", "style": "{"},
+    },
+    "handlers": {
+        "canjes_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(LOG_DIR / "canjes.log"),
+            "maxBytes": 1_000_000,
+            "backupCount": 3,
+            "formatter": "simple",
+            "encoding": "utf-8",
+        },
+    },
+    "loggers": {
+        "canjes": {"handlers": ["canjes_file"], "level": "INFO"},
+    },
+}
 
 try:
     from .local_settings import *
