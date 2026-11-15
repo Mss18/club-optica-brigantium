@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
-from django.core.exceptions import ValidationError
 
 from .models import Beneficio, Campana, Canje, Cupon
 
@@ -51,17 +52,19 @@ def canjear(request):
     if request.method == "POST":
         codigo = request.POST.get("codigo", "").strip()
         try:
-            cupon = Cupon.objects.get(codigo=codigo)
+            with transaction.atomic():
+                cupon = Cupon.objects.select_for_update().get(codigo=codigo)
+                if cupon.estado != "activo":
+                    messages.error(request, "Este cupón ya no está activo")
+                elif cupon.fecha_caducidad < timezone.localdate():
+                    messages.error(request, "Este cupón ha caducado")
+                else:
+                    Canje.objects.create(cupon=cupon, dependiente=request.user)
+                    cupon.estado = "canjeado"
+                    cupon.save()
+                    messages.success(request, f"Cupón canjeado: {cupon.beneficio}")
         except (Cupon.DoesNotExist, ValidationError):
             messages.error(request, "El código no existe")
-        else:
-            if cupon.estado != "activo":
-                messages.error(request, "Este cupón ya no está activo")
-            elif cupon.fecha_caducidad < timezone.localdate():
-                messages.error(request, "Este cupón ha caducado")
-            else:
-                Canje.objects.create(cupon=cupon, dependiente=request.user)
-                cupon.estado = "canjeado"
-                cupon.save()
-                messages.success(request, f"Cupón canjeado: {cupon.beneficio}")
+        except IntegrityError:
+            messages.error(request, "Este cupón ya no está activo")
     return render(request, "campanas/canjear.html")
