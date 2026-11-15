@@ -3,6 +3,7 @@ import uuid
 import segno
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 
 class Campana(models.Model):
@@ -18,6 +19,10 @@ class Campana(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    def esta_vigente(self):
+        hoy = timezone.localdate()
+        return self.activa and self.fecha_inicio <= hoy <= self.fecha_fin
 
 
 class Beneficio(models.Model):
