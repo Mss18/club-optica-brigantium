@@ -1,6 +1,5 @@
 from getpass import getpass
 
-import MySQLdb
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core.management import call_command
@@ -16,6 +15,10 @@ class Command(BaseCommand):
 
     def crear_base_datos(self):
         bd = settings.DATABASES["default"]
+        if "sqlite" in bd["ENGINE"]:
+            return
+        import MySQLdb
+
         conexion = MySQLdb.connect(
             host=bd["HOST"],
             user=bd["USER"],
