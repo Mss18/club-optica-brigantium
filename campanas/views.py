@@ -42,7 +42,7 @@ def pedir_cupon(request, beneficio_id):
         )
     else:
         messages.error(request, "Ya tienes el máximo de cupones de este beneficio")
-        return redirect("mis_cupones")
+    return redirect("mis_cupones")
 
 
 @login_required
