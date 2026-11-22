@@ -13,6 +13,7 @@
       <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
       {% if user.es_cliente %}
         <li class="nav-item"><a class="nav-link" href="{% url 'mis_cupones' %}">Mis cupones</a></li>
+        <li class="nav-item"><a class="nav-link text-danger" href="{% url 'baja' %}">Darme de baja</a></li>
       {% endif %}
       {% for grupo in user.groups.all %}
         {% if grupo.name == "Dependiente" %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block titulo %}Darme de baja{% endblock %}
+
+{% block contenido %}
+  <h1>Darme de baja del club</h1>
+  <p>Si continúas, se borrarán de forma definitiva tu cuenta, tus datos personales y todos tus cupones, incluidos los que aún no hayas usado. Esta acción no se puede deshacer.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sí, quiero darme de baja</button>
+    <a href="{% url 'inicio' %}" class="btn btn-outline-secondary">Cancelar</a>
+  </form>
+{% endblock %}
