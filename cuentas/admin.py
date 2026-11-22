@@ -12,5 +12,17 @@ class UsuarioAdmin(UserAdmin):
             {"fields": ("telefono", "fecha_nacimiento", "fecha_privacidad_aceptada")},
         ),
     )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        (None, {"fields": ("email", "telefono")}),
+    )
     readonly_fields = ("fecha_privacidad_aceptada",)
-    list_display = UserAdmin.list_display + ("fecha_privacidad_aceptada",)
+    list_display = (
+        "username",
+        "email",
+        "telefono",
+        "is_active",
+        "fecha_privacidad_aceptada",
+    )
+    list_filter = ("groups", "is_active")
+    search_fields = ("username", "email", "telefono")
+    ordering = ("username",)
