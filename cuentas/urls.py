@@ -9,4 +9,5 @@ urlpatterns = [
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("privacidad/", views.privacidad, name="privacidad"),
     path("baja/", views.baja, name="baja"),
+    path("cookies/aceptar/", views.aceptar_cookies, name="aceptar_cookies"),
 ]

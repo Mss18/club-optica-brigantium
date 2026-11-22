@@ -43,5 +43,14 @@
 {% endfor %}
     {% block contenido %}{% endblock %}
   </div>
+  {% if not request.COOKIES.aviso_cookies %}
+  <div class="alert alert-secondary mb-0 rounded-0 fixed-bottom d-flex justify-content-between align-items-center">
+    <span>Usamos solo cookies técnicas (sesión y seguridad). <a href="{% url 'privacidad' %}">Más información</a></span>
+    <form method="post" action="{% url 'aceptar_cookies' %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-dark">Entendido</button>
+    </form>
+  </div>
+{% endif %}
 </body>
 </html>

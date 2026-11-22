@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from cuentas.forms import RegistroForm
 
@@ -36,3 +37,11 @@ def baja(request):
         messages.success(request, "Tu cuenta y tus datos se han eliminado")
         return redirect("inicio")
     return render(request, "cuentas/baja.html")
+
+
+@require_POST
+def aceptar_cookies(request):
+    """Guarda en una cookie que el usuario ya vio el aviso."""
+    respuesta = redirect("inicio")
+    respuesta.set_cookie("aviso_cookies", "1", max_age=60 * 60 * 24 * 365, samesite="Lax")
+    return respuesta
