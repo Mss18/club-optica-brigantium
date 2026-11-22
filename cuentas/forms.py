@@ -1,11 +1,27 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils import timezone
 
 from .models import Usuario
 
 
-class RegistroForm(UserCreationForm):
+class EstiloBootstrapMixin:
+    """Añade las clases de Bootstrap a todos los campos de un formulario."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for campo in self.fields.values():
+            if isinstance(campo.widget, forms.CheckboxInput):
+                campo.widget.attrs["class"] = "form-check-input"
+            else:
+                campo.widget.attrs["class"] = "form-control"
+
+
+class LoginForm(EstiloBootstrapMixin, AuthenticationForm):
+    """Formulario de entrada con el estilo de la web."""
+
+
+class RegistroForm(EstiloBootstrapMixin, UserCreationForm):
     email = forms.EmailField(required=True)
 
     acepta_privacidad = forms.BooleanField(
@@ -16,7 +32,7 @@ class RegistroForm(UserCreationForm):
 
     def save(self, commit=True):
         usuario = super().save(commit=False)
-        usuario.privacidad_aceptada_el = timezone.now()
+        usuario.fecha_privacidad_aceptada = timezone.now()
         if commit:
             usuario.save()
         return usuario
