@@ -15,3 +15,7 @@ def registro(request):
     else:
         form = RegistroForm()
     return render(request, "cuentas/registro.html", {"form": form})
+
+
+def privacidad(request):
+    return render(request, "cuentas/privacidad.html")
