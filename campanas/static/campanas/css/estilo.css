@@ -1,0 +1,11 @@
+/* Fondo gris muy claro para que las tarjetas blancas destaquen */
+body {
+  background-color: #f6f8fa;
+}
+
+/* Textos formularios: más pequeños y discretos */
+.helptext,
+form ul {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
