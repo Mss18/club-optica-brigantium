@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.core.mail import send_mass_mail
@@ -57,8 +58,18 @@ class UsuarioAdmin(UserAdmin):
                 + "\n\nEnséñalos en la tienda.\n"
             )
             mensajes.append(
-                ("Tus cupones del Club Óptica Brigantium", cuerpo, None, [usuario.email])
+                (
+                    "Tus cupones del Club Óptica Brigantium",
+                    cuerpo,
+                    None,
+                    [usuario.email],
+                )
             )
         # Una sola conexión al servidor de correo para todos los mensajes.
         send_mass_mail(mensajes)
-        self.message_user(request, f"Correos enviados: {len(mensajes)}")
+        aviso = f"Correos enviados: {len(mensajes)}"
+        if settings.EMAIL_BACKEND.endswith("console.EmailBackend"):
+            aviso += (
+                " (modo prueba: se muestran en la consola del servidor, no se envían)"
+            )
+        self.message_user(request, aviso)
