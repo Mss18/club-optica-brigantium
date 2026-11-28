@@ -9,8 +9,11 @@
   <link href="{% static 'campanas/css/estilo.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand bg-white border-bottom px-3">
-    <a class="navbar-brand" href="{% url 'inicio' %}">Club Óptica Brigantium</a>
+  <nav class="navbar navbar-expand navbar-dark bg-black px-3">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio' %}">
+      <span class="me-3 pe-3 border-end border-secondary text-uppercase fw-light">Club</span>
+      <img src="{% static 'campanas/img/logo.svg' %}" alt="Club Óptica Brigantium" height="40">
+    </a>
     <ul class="navbar-nav me-auto">
       <li class="nav-item"><a class="nav-link" href="{% url 'inicio' %}">Inicio</a></li>
       {% if user.es_cliente %}
@@ -27,32 +30,34 @@
       {% endif %}
     </ul>
     {% if user.is_authenticated %}
-      <span class="me-3">Hola, {{ user.username }}</span>
+      <span class="navbar-text me-3">Hola, {{ user.username }}</span>
       <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-secondary btn-sm">Salir</button>
+        <button type="submit" class="btn btn-outline-light btn-sm">Salir</button>
       </form>
     {% else %}
-      <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'login' %}">Entrar</a>
+      <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">Entrar</a>
       <a class="btn btn-primary btn-sm" href="{% url 'registro' %}">Crear cuenta</a>
     {% endif %}
   </nav>
+
   <div class="container mt-4 pb-5">
     {% for message in messages %}
-  <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
-    {{ message }}
-  </div>
-{% endfor %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
     {% block contenido %}{% endblock %}
   </div>
+
   {% if not request.COOKIES.aviso_cookies %}
-  <div class="alert alert-secondary mb-0 rounded-0 fixed-bottom d-flex justify-content-between align-items-center">
-    <span>Usamos solo cookies técnicas (sesión y seguridad). <a href="{% url 'privacidad' %}">Más información</a></span>
-    <form method="post" action="{% url 'aceptar_cookies' %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-sm btn-dark">Entendido</button>
-    </form>
-  </div>
-{% endif %}
+    <div class="alert alert-secondary mb-0 rounded-0 fixed-bottom d-flex justify-content-between align-items-center">
+      <span>Usamos solo cookies técnicas (sesión y seguridad). <a href="{% url 'privacidad' %}">Más información</a></span>
+      <form method="post" action="{% url 'aceptar_cookies' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-dark">Entendido</button>
+      </form>
+    </div>
+  {% endif %}
 </body>
 </html>

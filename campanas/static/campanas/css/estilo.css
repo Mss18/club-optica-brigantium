@@ -3,9 +3,40 @@ body {
   background-color: #f6f8fa;
 }
 
-/* Textos formularios: más pequeños y discretos */
+/* Textos formularios */
 .helptext,
 form ul {
   font-size: 0.85rem;
   color: #6c757d;
+}
+
+/* Cabecera menú principal */
+.navbar-nav .nav-link {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+}
+
+/* Colores de marca: se cambian aquí y se actualizan en toda la web */
+:root {
+  --azul-marca: #0a3d91;
+  --azul-marca-oscuro: #083072;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--azul-marca);
+  --bs-btn-border-color: var(--azul-marca);
+  --bs-btn-hover-bg: var(--azul-marca-oscuro);
+  --bs-btn-hover-border-color: var(--azul-marca-oscuro);
+  --bs-btn-active-bg: var(--azul-marca-oscuro);
+  --bs-btn-active-border-color: var(--azul-marca-oscuro);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--azul-marca);
+  --bs-btn-border-color: var(--azul-marca);
+  --bs-btn-hover-bg: var(--azul-marca);
+  --bs-btn-hover-border-color: var(--azul-marca);
+  --bs-btn-active-bg: var(--azul-marca);
+  --bs-btn-active-border-color: var(--azul-marca);
 }
