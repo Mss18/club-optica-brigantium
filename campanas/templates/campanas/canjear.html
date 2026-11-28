@@ -3,22 +3,62 @@
 {% block titulo %}Canjear cupón{% endblock %}
 
 {% block contenido %}
-  <h1>Canjear cupón</h1>
-  <form method="post" id="form-canje">
-    {% csrf_token %}
-    <label for="codigo" class="form-label">Código del cupón</label>
-    <input type="text" id="codigo" name="codigo" class="form-control mb-3" required autofocus>
-    <button type="submit" class="btn btn-primary">Canjear</button>
-  </form>
-  <div id="lector" class="mt-4" style="max-width: 400px;"></div>
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <h1 class="h3 mb-4">Canjear cupón</h1>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-<script>
-  const lector = new Html5QrcodeScanner("lector", { fps: 10, qrbox: 250 });
-  lector.render((texto) => {
-    document.getElementById("codigo").value = texto;
-    lector.clear();
-    document.getElementById("form-canje").submit();
-  });
-</script>
+      <div class="card mb-4">
+        <div class="card-body text-center">
+          <p class="text-muted">Pide al cliente que muestre el QR de su cupón</p>
+          <button type="button" id="boton-camara" class="btn btn-primary btn-lg w-100">
+            Escanear con la cámara
+          </button>
+          <div id="aviso-camara" class="alert alert-warning d-none mt-3 mb-0">
+            No se ha podido abrir la cámara. Introduce el código a mano.
+          </div>
+          <div id="lector" class="mt-3"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h6">Sin cámara? Introduce el código a mano</h2>
+          <form method="post" id="form-canje">
+            {% csrf_token %}
+            <input type="text" id="codigo" name="codigo" class="form-control mb-3" autocomplete="off" required>
+            <button type="submit" class="btn btn-outline-primary w-100">Canjear</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <script>
+    const lector = new Html5Qrcode("lector");
+    const botonCamara = document.getElementById("boton-camara");
+    let leido = false;
+
+    botonCamara.addEventListener("click", () => {
+      botonCamara.disabled = true;
+      lector
+        .start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 250 },
+          (texto) => {
+            // La cámara detecta el QR varias veces por segundo: solo se procesa la primera.
+            if (leido) return;
+            leido = true;
+            lector.stop().then(() => {
+              document.getElementById("codigo").value = texto;
+              document.getElementById("form-canje").submit();
+            });
+          }
+        )
+        .catch(() => {
+          botonCamara.disabled = false;
+          document.getElementById("aviso-camara").classList.remove("d-none");
+        });
+    });
+  </script>
 {% endblock %}
