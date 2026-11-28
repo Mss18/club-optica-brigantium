@@ -3,16 +3,32 @@
 {% block titulo %}Mis cupones{% endblock %}
 
 {% block contenido %}
-  <h1>Mis cupones</h1>
-  {% for cupon in cupones %}
-    <div class="card mb-3">
-      <div class="card-body">
-        <h2 class="h5">{{ cupon.beneficio.titulo }}</h2>
-        <p>Estado: {{ cupon.get_estado_display }} · Caduca el {{ cupon.fecha_caducidad }}</p>
-        <img src="{{ cupon.qr }}" alt="Código QR del cupón">
+  <h1 class="h3 mb-4">Mis cupones</h1>
+  <div class="row g-4">
+    {% for cupon in cupones %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h2 class="h6 mb-0">{{ cupon.beneficio.titulo }}</h2>
+            <span class="badge {% if cupon.estado == 'activo' %}text-bg-success{% else %}text-bg-secondary{% endif %}">
+              {{ cupon.get_estado_display }}
+            </span>
+          </div>
+          <div class="card-body text-center">
+            {% if cupon.estado == "activo" %}
+              <img src="{{ cupon.qr }}" alt="Código QR del cupón" class="img-fluid" width="180">
+              <p class="small text-muted mt-2 mb-0">Código: <code>{{ cupon.codigo }}</code></p>
+            {% else %}
+              <p class="text-muted mb-0">Este cupón ya no se puede usar.</p>
+            {% endif %}
+          </div>
+          <div class="card-footer bg-white small text-muted">
+            Caduca el {{ cupon.fecha_caducidad|date:"d/m/Y" }}
+          </div>
+        </div>
       </div>
-    </div>
-  {% empty %}
-    <p>Todavía no tienes cupones.</p>
-  {% endfor %}
+    {% empty %}
+      <p>Todavía no tienes cupones. Mira las <a href="{% url 'inicio' %}">campañas activas</a>.</p>
+    {% endfor %}
+  </div>
 {% endblock %}
