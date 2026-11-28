@@ -149,6 +149,11 @@ LOGGING = {
     },
 }
 
+# Correo: por defecto se imprime en la terminal en vez de enviarse.
+# Para el envío real se cambia en local_settings.py (ver local_settings.example.py).
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "Club Óptica Brigantium <no-responder@example.com>"
+
 try:
     from .local_settings import *
 except ImportError:
